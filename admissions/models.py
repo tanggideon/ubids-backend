@@ -15,7 +15,7 @@ class Applicant(models.Model):
         ("rejected", "Rejected"),
         ("admitted", "Admitted")
     ]
-    user = models.ForeignKey(User, related_name="applicant")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     # form details
     application_type = models.CharField(max_length=20, choices=APPLICATION_TYPES)
@@ -32,7 +32,7 @@ class Applicant(models.Model):
         return self.user.first_name
     
     
-class PeronalDetails(models.Model):
+class PersonalDetails(models.Model):
     applicant = models.ForeignKey(Applicant, related_name="applicant_details", on_delete=models.CASCADE)
     gender = models.CharField()
     marital_status = models.CharField()
@@ -47,7 +47,7 @@ class PeronalDetails(models.Model):
 
 
 class History(models.Model):
-    applicant = models.ForeignKey(Applicant, related_name="applicant_history", on_delete=models.CASCADE)
+    applicant = models.ForeignKey(Applicant, related_name="applicant_records", on_delete=models.CASCADE)
     academic_history = models.JSONField()
     work_experience = models.JSONField()
 
@@ -61,7 +61,7 @@ class Choices(models.Model):
 
 
 class ApplicationUploads(models.Model):
-    applicant = models.ForeignKey(Applicant, related_name="applicant_history", on_delete=models.CASCADE)
+    applicant = models.ForeignKey(Applicant, related_name="applicant_upload", on_delete=models.CASCADE)
     certificates = models.JSONField()
     id_card = models.JSONField()
 
